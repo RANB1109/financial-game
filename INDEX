@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Life Level: Nate’s Financial Quest</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Mobile support -->
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background: #ecf0f1;
+      padding: 20px;
+      margin: auto;
+      max-width: 100%;
+      box-sizing: border-box;
+    }
+    h1, h2, p {
+      color: #2c3e50;
+      font-size: 4vw;
+      line-height: 1.4;
+    }
+    .menu, .level {
+      display: none;
+    }
+    .menu.active, .level.active {
+      display: block;
+    }
+    .button {
+      width: 100%;
+      padding: 16px;
+      margin: 10px 0;
+      font-size: 4vw;
+      background: #2980b9;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .button:hover { background: #3498db; }
+    input[type="text"] {
+      width: 100%;
+      padding: 12px;
+      font-size: 4vw;
+      margin: 8px 0;
+      box-sizing: border-box;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    .result, .summary {
+      margin: 20px 0;
+      padding: 15px;
+      background: #fff;
+      font-size: 4vw;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="mainMenu" class="menu active">
+    <h1>🎮 Nate’s Financial Quest</h1>
+    <p>Select a level:</p>
+    <button class="button" onclick="showLevel('level1')">Level 1: Credit Chaos</button>
+    <button class="button" onclick="showLevel('level2')">Level 2: Cash Sprint</button>
+    <button class="button" onclick="showLevel('level3')">Level 3: Adult Arena</button>
+    <button class="button" onclick="showLevel('level4')">Level 4: Startup Pitch</button>
+  </div>
+
+  <!-- Level 1 -->
+  <div id="level1" class="level">
+    <h2>Level 1: Credit Chaos</h2>
+    <p>$500 console; you have $600, card limit $1000. What do you do?</p>
+    <button class="button" onclick="cc('bad1')">Buy with card</button>
+    <button class="button" onclick="cc('good1')">Save & pay later</button>
+    <div id="cc1" class="result"></div>
+    <p>Concert for $120—use card or skip?</p>
+    <button class="button" onclick="cc('bad2')">Use card</button>
+    <button class="button" onclick="cc('good2')">Skip it</button>
+    <div id="cc2" class="result"></div>
+    <button class="button" onclick="goHome()">⬅️ Back</button>
+  </div>
+
+  <!-- Level 2 -->
+  <div id="level2" class="level">
+    <h2>Level 2: Cash Sprint</h2>
+    <p>Income: $800. Goal: Save $160.</p>
+    <button class="button" onclick="spend(100)">Theme Park $100</button>
+    <button class="button" onclick="spend(20)">Movie $20</button>
+    <button class="button" onclick="spend(0)">Game Night $0</button><br>
+    <button class="button" onclick="spend(300)">New Phone $300</button>
+    <button class="button" onclick="spend(50)">Accessories $50</button>
+    <button class="button" onclick="spend(0)">Skip Buy $0</button><br>
+    <button class="button" onclick="spend(40)">Gift $40</button>
+    <button class="button" onclick="spend(10)">DIY $10</button>
+    <button class="button" onclick="spend(0)">Message Only $0</button>
+    <div id="cash" class="summary"></div>
+    <button class="button" onclick="goHome()">⬅️ Back</button>
+  </div>
+
+  <!-- Level 3 -->
+  <div id="level3" class="level">
+    <h2>Level 3: Adult Arena</h2>
+    <p>Budget: $1500 for rent, car, power.</p>
+    <button class="button" onclick="adult(800)">Pay Rent $800</button>
+    <button class="button" onclick="adult(0)">Skip Rent $0</button><br>
+    <button class="button" onclick="adult(200)">Fix Car $200</button>
+    <button class="button" onclick="adult(50)">Duct Tape $50</button><br>
+    <button class="button" onclick="adult(100)">Pay Power $100</button>
+    <button class="button" onclick="adult(0)">Ignore Power $0</button>
+    <div id="adult" class="summary"></div>
+    <button class="button" onclick="goHome()">⬅️ Back</button>
+  </div>
+
+  <!-- Level 4 -->
+  <div id="level4" class="level">
+    <h2>Level 4: Startup Pitch</h2>
+    <input type="text" id="val" placeholder="What's the value?">
+    <input type="text" id="pln" placeholder="What's the plan?">
+    <input type="text" id="ris" placeholder="What's the risk?">
+    <button class="button" onclick="pitch()">Submit Pitch</button>
+    <div id="pitch" class="summary"></div>
+    <button class="button" onclick="goHome()">⬅️ Back</button>
+  </div>
+
+  <script>
+    function showLevel(id) {
+      document.querySelectorAll('.menu, .level').forEach(el => el.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+    }
+    function goHome() {
+      document.querySelectorAll('.menu, .level').forEach(el => el.classList.remove('active'));
+      document.getElementById('mainMenu').classList.add('active');
+      location.reload();
+    }
+    function cc(c) {
+      const msgs = {
+        good1: "✅ Smart move!",
+        bad1: "⚠️ Risky choice.",
+        good2: "🎉 Good self-control!",
+        bad2: "😬 That might hurt your score."
+      };
+      document.getElementById("cc" + c.slice(-1)).innerText = msgs[c];
+    }
+    let spent = 0, count = 0;
+    function spend(a) {
+      spent += a;
+      if (++count == 3) {
+        let saved = 800 - spent;
+        document.getElementById("cash").innerText = `Saved: $${saved}\n${saved >= 160 ? "🎯 Great job!" : "💸 Try saving more."}`;
+      }
+    }
+    let aspent = 0, ac = 0;
+    function adult(a) {
+      aspent += a;
+      if (++ac == 3) {
+        let rem = 1500 - aspent;
+        document.getElementById("adult").innerText = `Remaining: $${rem}\n${rem >= 300 ? "🧠 On track!" : "🫣 Tight month!"}`;
+      }
+    }
+    function pitch() {
+      let v = val.value.trim(), p = pln.value.trim(), r = ris.value.trim();
+      pitch.innerText = v && p && r ?
+        "💼 Investment Approved! Great pitch!" :
+        "🚫 Fill all fields clearly to get funded.";
+    }
+  </script>
+
+</body>
+</html>
